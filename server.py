@@ -12,6 +12,9 @@ from oauth2client import client
 import sqlite3
 from flask import g
 
+from dandelion import dandelion
+
+
 DATABASE = './database/database.db'
 
 def get_db():
@@ -49,15 +52,21 @@ def login():
          textFormat="plainText"
     ).execute()
 
-    print response_comments_threats
+    p = []
+    for i in response_comments_threats['items']:
+	p.append((i['id'], i['snippet']['topLevelComment']['snippet']['textDisplay']))
 
-    # youtube.comments().delete(
-    # id=comment_id
-    # ).execute()
+    print p
+
+    l = dandelion.sentiment_list(p)
+
+    print l
+
+    for e in l:
+	youtube.comments().markAsSpam(id=e).execute()
+    #youtube.comments().delete(id='z124y5mzvlmceld2c235cjzh4mjbexgzu04').execute()
 
     id = response_id.get("items")[0].get("id")
-
-    print 'adding to data'
     c = get_db().cursor()
     user_creds = flask.session['credentials']
     c.execute("insert into users (id, creds) values ( '" + id + "' , '" + user_creds + "' )")

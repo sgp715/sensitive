@@ -3,7 +3,7 @@ import json
 import unittest
 
 json_data = ''
-with open('./creds.json') as f:
+with open('./dandelion/creds.json') as f:
     json_data = json.load(f)
 
 key = json_data.get('key')
@@ -34,6 +34,8 @@ def request_sentiment(text):
     val = None
     if r.status_code == 200:
         val = r.json()
+    
+    print val
 
     return val
 
@@ -42,11 +44,16 @@ def sentiment_list(list):
     given list of comments return list of sentiments
     """
 
-    sentiments = []
-    for t in :
-        sentiments.append(request_sentiment(t))
+    ids = []
+    for t in list:
 
-    return sentiments
+        s = get_score(request_sentiment(t[1]))
+
+        if s < 0:
+            ids.append(t[0])
+
+    return ids
+
 
 def get_score(json_data):
     """
