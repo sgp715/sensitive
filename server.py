@@ -14,7 +14,7 @@ app = flask.Flask(__name__)
 
 @app.route('/')
 def index():
-    return "Hey"
+    return render_template('material-login-form/index.html')
 
 @app.route('/login')
 def login():
