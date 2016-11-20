@@ -52,8 +52,8 @@ def oauth2callback():
   else:
     auth_code = flask.request.args.get('code')
     credentials = flow.step2_exchange(auth_code)
-    flask.session['credentials'] = credentials.to_json()
-    return flask.redirect(flask.url_for('index'))
+    flask.session['credentials'] = credentialss.to_json()
+    return flask.redirect(flask.url_for('login'))
 
 
 if __name__ == '__main__':
