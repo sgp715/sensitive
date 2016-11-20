@@ -1,0 +1,6 @@
+apiclient
+authomatic
+oauth2client
+requests
+flask
+Flask-OAuth
