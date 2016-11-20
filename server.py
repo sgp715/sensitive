@@ -11,7 +11,12 @@ from oauth2client import client
 
 app = flask.Flask(__name__)
 
+
 @app.route('/')
+def index():
+    return "Hey"
+
+@app.route('/login')
 def index():
   if 'credentials' not in flask.session:
     return flask.redirect(flask.url_for('oauth2callback'))
@@ -27,13 +32,12 @@ def index():
     #     allThreadsRelatedToChannelId="UCW4C_qVMMbidqni7noNNZDg",
     #     textFormat="plainText"
     # ).execute()
-    id = json.dumps(response.get("items")[0].get("id"))
-    return flask.redirect(flask.url_for('user/' + id))
+    id = response.get("items")[0].get("id")
+    return flask.redirect('user/' + id)
 
 @app.route('/user/<id>')
 def user(id):
     return id
-
 
 @app.route('/oauth2callback')
 def oauth2callback():
@@ -50,8 +54,6 @@ def oauth2callback():
     credentials = flow.step2_exchange(auth_code)
     flask.session['credentials'] = credentials.to_json()
     return flask.redirect(flask.url_for('index'))
-
-@app.route('')
 
 
 if __name__ == '__main__':
