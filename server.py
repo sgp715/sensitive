@@ -5,7 +5,7 @@ import json
 
 import flask
 import httplib2
-
+from flask import render_template
 from googleapiclient.discovery import build
 from oauth2client import client
 
@@ -14,7 +14,7 @@ app = flask.Flask(__name__)
 
 @app.route('/')
 def index():
-    return "Hey"
+    return render_template('index.html')
 
 @app.route('/login')
 def login():
