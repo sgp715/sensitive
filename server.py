@@ -53,13 +53,16 @@ def login():
     print 'adding to data'
     c = get_db().cursor()
     c.execute("insert into users values (1)")
+    c.commit()
     c.close()
 
     return flask.redirect('user/' + id)
 
 @app.route('/user/<id>')
 def user(id):
-    return id
+    info = "" #put all the stuff in here
+    return render_template('user.html', info)
+
 
 @app.route('/oauth2callback')
 def oauth2callback():

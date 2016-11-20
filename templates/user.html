@@ -1,78 +1,80 @@
-{# index.html #}
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Material Login Form</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
 
-{% block body %}
+  <link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900'>
+<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
 
-    <a href="/">Home</a>
+      <link rel="stylesheet" href="css/style.css">
 
-    {# Check for errors. #}
-    {% if result.error %}
-        <h2>Damn that error: {{ result.error.message }}</h2>
-    {% endif %}
+  
+</head>
 
-    {# Welcome the user. #}
-    {% if result.user %}
-        <h1>Hi {{ result.user.name }}</h1>
-        <h2>Your id is: {{ result.user.id }}</h2>
-        <h2>Your email is: {{ result.user.email }}</h2>
-    {% endif %}
+<body>
+  
+<!-- Mixins-->
+<!-- Pen Title-->
+<div class="pen-title">
+  <h1>Material Login Form</h1><span>Pen <i class='fa fa-code'></i> by <a href='http://andytran.me'>Andy Tran</a></span>
+</div>
+<div class="rerun"><a href="">Rerun Pen</a></div>
+<div class="container">
+  <div class="card"></div>
+  <div class="card">
+    <h1 class="title">Login</h1>
+    <form>
+      <div class="input-container">
+        <input type="text" id="Username" required="required"/>
+        <label for="Username">Username</label>
+        <div class="bar"></div>
+      </div>
+      <div class="input-container">
+        <input type="password" id="Password" required="required"/>
+        <label for="Password">Password</label>
+        <div class="bar"></div>
+      </div>
+      <div class="button-container">
+        <button><span>Go</span></button>
+      </div>
+      <div class="footer"><a href="#">Forgot your password?</a></div>
+    </form>
+  </div>
+  <div class="card alt">
+    <div class="toggle"></div>
+    <h1 class="title">Register
+      <div class="close"></div>
+    </h1>
+    <form>
+      <div class="input-container">
+        <input type="text" id="Username" required="required"/>
+        <label for="Username">Username</label>
+        <div class="bar"></div>
+      </div>
+      <div class="input-container">
+        <input type="password" id="Password" required="required"/>
+        <label for="Password">Password</label>
+        <div class="bar"></div>
+      </div>
+      <div class="input-container">
+        <input type="password" id="Repeat Password" required="required"/>
+        <label for="Repeat Password">Repeat Password</label>
+        <div class="bar"></div>
+      </div>
+      <div class="button-container">
+        <button><span>Next</span></button>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- Portfolio--><a id="portfolio" href="http://andytran.me/" title="View my portfolio!"><i class="fa fa-link"></i></a>
+<!-- CodePen--><a id="codepen" href="http://codepen.io/andytran/" title="Follow me!"><i class="fa fa-codepen"></i></a>
+  <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 
-    {# If the user has credentials, we can access his/her protected resources. #}
-    {% if result.user.credentials %}
+    <script src="js/index.js"></script>
 
-        {# Let's get the user's 5 most recent statuses. #}
-        {% if result.provider.name == 'fb' %}
-            Your are logged in with Facebook.<br />
-
-            {# Insert the user's ID to the URL and access the resource. #}
-            {% set url = 'https://graph.facebook.com/{0}?fields=feed.limit(5)'.format(result.user.id) %}
-            {% set response = result.provider.access(url) %}
-
-            {# Parse the response. #}
-            {% if response.status == 200 %}
-
-                {% if response.data.error %}
-                    Damn that error: {{ response.data.error }}!
-                {% endif %}
-
-                {% if response.data.feed.data %}
-                    Your 5 most recent statuses:<br />
-
-                    {% for status in response.data.feed.data %}
-                        <h3>{{ status.message or status.name or status.story }}</h3>
-                        Posted on: {{ status.created_time }}
-                    {% endfor %}
-                {% endif %}
-
-            {% endif %}{# response.status == 200 #}
-
-        {% endif %}{# result.provider.name == 'fb' #}
-
-        {# Do the same for Twitter. #}
-        {% if result.provider.name == 'tw' %}
-            Your are logged in with Twitter.<br />
-
-            {% set url = 'https://api.twitter.com/1.1/statuses/user_timeline.json?count=5' %}
-            {% set response = result.provider.access(url) %}
-
-            {% if response.status == 200 %}
-
-                {% if response.data.errors %}
-                    Damn that error: {{ response.data.errors }}!
-                {% endif %}
-
-                {% if response.data %}
-                    Your 5 most recent tweets:<br />
-
-                    {% for tweet in response.data %}
-                        <h3>{{ tweet.text }}</h3>
-                        Posted on: {{ tweet.created_at }}
-                    {% endfor %}
-                {% endif %}
-
-            {% endif %}
-
-        {% endif %}{# result.provider.name == 'tw' #}
-    {% endif %}{# result.user.credentials #}
-
-{% endblock body %}
+</body>
+</html>
