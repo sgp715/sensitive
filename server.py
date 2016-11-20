@@ -61,7 +61,8 @@ def login():
 
 @app.route('/user/<id>')
 def user(id):
-    return id
+    info = "" #put the info in here
+    return render_template("user.html", info = info)
 
 
 @app.route('/oauth2callback')
