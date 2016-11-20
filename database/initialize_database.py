@@ -4,7 +4,7 @@ import sqlite3
 conn = sqlite3.connect('./database.db')
 c = conn.cursor()
 
-c.execute('CREATE TABLE users (id text)')
+c.execute('CREATE TABLE users (id text, creds text)')
 
 conn.commit()
 conn.close()

@@ -52,8 +52,9 @@ def login():
 
     print 'adding to data'
     c = get_db().cursor()
-    c.execute("insert into users values ("+id+","+json.dumps(flask.session['credentials'])+")")
-    c.commit()
+    user_creds = json.dumps(flask.session['credentials'])
+    c.execute("insert into users (id, creds) values ( '" + id + "' , '" + user_creds + "' )")
+    get_db().commit()
     c.close()
 
     return flask.redirect('user/' + id)
