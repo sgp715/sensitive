@@ -37,6 +37,17 @@ def request_sentiment(text):
 
     return val
 
+def sentiment_list(list):
+    """
+    given list of comments return list of sentiments
+    """
+
+    sentiments = []
+    for t in :
+        sentiments.append(request_sentiment(t))
+
+    return sentiments
+
 def get_score(json_data):
     """
     extract score from data
