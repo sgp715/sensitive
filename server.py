@@ -52,7 +52,7 @@ def login():
 
     print 'adding to data'
     c = get_db().cursor()
-    c.execute("insert into users values (1)")
+    c.execute("insert into users values ("+id+","+json.dumps(flask.session['credentials'])+")")
     c.commit()
     c.close()
 
