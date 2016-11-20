@@ -1,3 +1,6 @@
+# Usage example:
+# python server.py
+
 import json
 
 import flask
@@ -8,7 +11,6 @@ from oauth2client import client
 
 app = flask.Flask(__name__)
 
-
 @app.route('/')
 def index():
   if 'credentials' not in flask.session:
@@ -18,13 +20,19 @@ def index():
     return flask.redirect(flask.url_for('oauth2callback'))
   else:
     http_auth = credentials.authorize(httplib2.Http())
-    youtube = build('youtube', 'v3', http_auth) #, developerKey='AIzaSyBwDLWOayjBDmFXU-QsCoGFc0l6pIWFfYs')
-    response = youtube.commentThreads().list(
-        part="snippet",
-        allThreadsRelatedToChannelId="UCW4C_qVMMbidqni7noNNZDg",
-        textFormat="plainText"
-    ).execute()
-    return json.dumps(response)
+    youtube = build('youtube', 'v3', http_auth)
+    response = youtube.channels().list(part="id", mine="true").execute()
+    # response = youtube.commentThreads().list(
+    #     part="snippet",
+    #     allThreadsRelatedToChannelId="UCW4C_qVMMbidqni7noNNZDg",
+    #     textFormat="plainText"
+    # ).execute()
+    id = json.dumps(response.get("items")[0].get("id"))
+    return flask.redirect(flask.url_for('user/' + id))
+
+@app.route('/user/<id>')
+def user(id):
+    return id
 
 
 @app.route('/oauth2callback')
@@ -42,6 +50,8 @@ def oauth2callback():
     credentials = flow.step2_exchange(auth_code)
     flask.session['credentials'] = credentials.to_json()
     return flask.redirect(flask.url_for('index'))
+
+@app.route('')
 
 
 if __name__ == '__main__':
