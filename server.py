@@ -9,8 +9,24 @@ from flask import render_template
 from googleapiclient.discovery import build
 from oauth2client import client
 
+import sqlite3
+from flask import g
+
+DATABASE = './database/database.db'
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = sqlite3.connect(DATABASE)
+    return db
+
 app = flask.Flask(__name__)
 
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
 
 @app.route('/')
 def index():
@@ -33,6 +49,12 @@ def login():
     #     textFormat="plainText"
     # ).execute()
     id = response.get("items")[0].get("id")
+
+    print 'adding to data'
+    c = get_db().cursor()
+    c.execute("insert into users values (1)")
+    c.close()
+
     return flask.redirect('user/' + id)
 
 @app.route('/user/<id>')
