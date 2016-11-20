@@ -42,17 +42,24 @@ def login():
   else:
     http_auth = credentials.authorize(httplib2.Http())
     youtube = build('youtube', 'v3', http_auth)
-    response = youtube.channels().list(part="id", mine="true").execute()
-    # response = youtube.commentThreads().list(
-    #     part="snippet",
-    #     allThreadsRelatedToChannelId="UCW4C_qVMMbidqni7noNNZDg",
-    #     textFormat="plainText"
+    response_id = youtube.channels().list(part="id", mine="true").execute()
+    response_comments_threats = youtube.commentThreads().list(
+         part="snippet",
+         allThreadsRelatedToChannelId="UCW4C_qVMMbidqni7noNNZDg",
+         textFormat="plainText"
+    ).execute()
+
+    print response_comments_threats
+
+    # youtube.comments().delete(
+    # id=comment_id
     # ).execute()
-    id = response.get("items")[0].get("id")
+
+    id = response_id.get("items")[0].get("id")
 
     print 'adding to data'
     c = get_db().cursor()
-    user_creds = json.dumps(flask.session['credentials'])
+    user_creds = flask.session['credentials']
     c.execute("insert into users (id, creds) values ( '" + id + "' , '" + user_creds + "' )")
     get_db().commit()
     c.close()
