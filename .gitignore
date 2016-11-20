@@ -1,1 +1,2 @@
-./database/database.db
+database/database.db
+.DS_Store
