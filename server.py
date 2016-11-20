@@ -5,7 +5,7 @@ import json
 
 import flask
 import httplib2
-
+from flask import render_template
 from googleapiclient.discovery import build
 from oauth2client import client
 
