@@ -17,7 +17,7 @@ def index():
     return "Hey"
 
 @app.route('/login')
-def index():
+def login():
   if 'credentials' not in flask.session:
     return flask.redirect(flask.url_for('oauth2callback'))
   credentials = client.OAuth2Credentials.from_json(flask.session['credentials'])
