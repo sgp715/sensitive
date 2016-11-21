@@ -16,15 +16,13 @@ class youtubeAPI():
 
     def __init__(self, creds):
         credentials = client.OAuth2Credentials.from_json(creds)
-        self.http_auth = credentials.authorize(httplib2.Http())
-
-
-    def _get_channel_id(self):
+        http_auth = credentials.authorize(httplib2.Http())
 
         self.youtube = build('youtube', 'v3', http_auth)
 
+    def _get_channel_id(self):
+
         response = self.youtube.channels().list(part="id", mine="true").execute()
-        #id = response.get("items")[0].get("id")
         return response
 
     def get_channel_id(self, json_data):
@@ -52,18 +50,29 @@ class youtubeAPI():
         id=comment_id
         ).execute()
 
-    def delete_comments(self, list):
+    def mark_as_spam(self, comment_id):
+
+        youtube.comments().markAsSpam(id=comment_id).execute()
+
+    def mar_comments(self, list, action):
+        """
+        applies the action(deleting or marking as spam) to the list
+        """
 
         for comment_id in list:
-            delete_comment(comment_id)
+            action(comment_id)
 
 class TestY(unittest.TestCase):
 
     unittest.creds = '{"_module": "oauth2client.client", "scopes": ["https://www.googleapis.com/auth/youtube.force-ssl"], "token_expiry": "2016-11-20T15:42:52Z", "id_token": null, "access_token": "ya29.CjCcA1uzo-j58ihT6Rb34Eaoh_5n1f8NxFb0ervV5goMDeWx-xjEAnA68IBm_-9v5r8", "token_uri": "https://accounts.google.com/o/oauth2/token", "invalid": false, "token_response": {"access_token": "ya29.CjCcA1uzo-j58ihT6Rb34Eaoh_5n1f8NxFb0ervV5goMDeWx-xjEAnA68IBm_-9v5r8", "token_type": "Bearer", "expires_in": 3600}, "client_id": "425814746481-rtbl3jnrsdpli44goq4aufmlu84ii4bl.apps.googleusercontent.com", "token_info_uri": "https://www.googleapis.com/oauth2/v3/tokeninfo", "client_secret": "qOj18iHicJUoeRp3CcTJhMAq", "revoke_uri": "https://accounts.google.com/o/oauth2/revoke", "_class": "OAuth2Credentials", "refresh_token": null, "user_agent": null}'
     unittest.youtube =  youtubeAPI(unittest.creds)
 
-    #def test_good(self):
-    #    print unittest.youtube_get_channel_id()
+    def test_good(self):
+        print unittest.youtube._get_channel_id()
 
     def test_bad(self):
         pass
+
+if __name__ == "__main__":
+
+    unittest.main()

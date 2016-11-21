@@ -44,13 +44,18 @@ def sentiment_list(list):
     given list of comments return list of sentiments
     """
 
+    # TODO: store in database for user to change
+    sensitivity = 0
+
+    id_position = 1
+    text_position = 0
     ids = []
     for t in list:
-        
-        s = get_score(request_sentiment(t[1]))
 
-        if s < 0:
-            ids.append(t[0])
+        s = get_score(request_sentiment(t[position]))
+
+        if s < sensitivity:
+            ids.append(t[text_position])
 
     return ids
 

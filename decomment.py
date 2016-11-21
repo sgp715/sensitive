@@ -13,6 +13,8 @@ DATABASE = './database/database.db'
 conn = sqlite3.connect('./database.db')
 c = conn.cursor()
 
+# TODO: look at token refresh https://developers.google.com/youtube/v3/guides/auth/server-side-web-apps#OAuth2_Refreshing_a_Token
+
 while True:
 
     mins = 1
@@ -21,7 +23,7 @@ while True:
 
     for row in c.execute('SELECT * FROM users'):
         id = row[0]
-        creds = json.loads(= ast.literal_eval(row[1]))
+        creds = row[1]
         youtube_api = youtube.youtubeAPI(creds)
         threads = get_channel_threads()
 

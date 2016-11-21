@@ -10,6 +10,10 @@ In a mission to stop online harassment we present Sensitive. Sensitive uses Goog
 ```
 $ sudo apt-get install sqlite3 libsqlite3-dev
 ```
+* install pip
+```
+$ sudo apt-get install python-pip
+```
 * install from requirements.txt
 ```
 $ sudo pip install -r requirements.txt
@@ -17,7 +21,10 @@ $ sudo pip install -r requirements.txt
 
 
 ## Usage
-
+* Initialize the database
+```
+$ python database/initialize_database.py
+```
 * To start running the webapp (binds to port 80)
 ```
 $ sudo python server.py -p
