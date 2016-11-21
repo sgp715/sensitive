@@ -42,9 +42,13 @@ def sentiment_list(list):
     given list of comments return list of sentiments
     """
 
-    sentiments = []
-    for t in :
-        sentiments.append(request_sentiment(t))
+    ids = []
+    for t in list:
+
+        s = request_sentiment(t[0])
+
+        if s < 0:
+            ids.append(t[1])
 
     return sentiments
 
@@ -56,7 +60,7 @@ def get_score(json_data):
     return json_data.get('sentiment').get('score')
 
 
-class TestStringMethods(unittest.TestCase):
+class TestD(unittest.TestCase):
 
 
     def test_good(self):

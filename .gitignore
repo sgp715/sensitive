@@ -1,2 +1,3 @@
 database/database.db
 .DS_Store
+.remote-sync.json

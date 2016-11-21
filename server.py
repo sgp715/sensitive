@@ -42,19 +42,8 @@ def login():
   else:
     http_auth = credentials.authorize(httplib2.Http())
     youtube = build('youtube', 'v3', http_auth)
+
     response_id = youtube.channels().list(part="id", mine="true").execute()
-    response_comments_threats = youtube.commentThreads().list(
-         part="snippet",
-         allThreadsRelatedToChannelId="UCW4C_qVMMbidqni7noNNZDg",
-         textFormat="plainText"
-    ).execute()
-
-    print response_comments_threats
-
-    # youtube.comments().delete(
-    # id=comment_id
-    # ).execute()
-
     id = response_id.get("items")[0].get("id")
 
     print 'adding to data'
