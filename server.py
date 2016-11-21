@@ -58,8 +58,7 @@ def login():
 
 @app.route('/user/<id>')
 def user(id):
-    info = "" #put the info in here
-    return render_template("user.html", info = info)
+    return render_template("user.html", id = id)
 
 
 @app.route('/oauth2callback')
@@ -93,7 +92,6 @@ if __name__ == '__main__':
   (options, args) = parser.parse_args()
 
   if options.prod == True:
-      app.run(host='0.0.0.0',port=80)
+      app.run(host='0.0.0.0', port=80, use_debugger=True, debug=True, use_reloader=True)
   else:
-      app.run(use_debugger=True, debug=True,
-    use_reloader=True)
+      app.run(use_debugger=True, debug=True, use_reloader=True)
