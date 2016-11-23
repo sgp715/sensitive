@@ -48,8 +48,13 @@ def login():
     response_id = youtube.channels().list(part="id", mine="true").execute()
     id = response_id.get("items")[0].get("id")
 
+
+    # TODO: check if the id is already there and if it is just replace
     c = get_db().cursor()
     user_creds = flask.session['credentials']
+    # if c.execute("select * from users where id = " + id).fetchone() == None:
+    #     c.execute("update users set creds = '" + user_creds + "' where id = '" + id)
+    print "user_creds " + user_creds
     c.execute("insert into users (id, creds) values ( '" + id + "' , '" + user_creds + "' )")
     get_db().commit()
     c.close()
