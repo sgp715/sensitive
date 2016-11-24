@@ -17,7 +17,7 @@ c = conn.cursor()
 
 while True:
 
-    mins = 1
+    mins = 2
     sweep_time = mins * 60
     time.sleep(sweep_time)
 

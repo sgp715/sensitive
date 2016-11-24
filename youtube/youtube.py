@@ -4,15 +4,22 @@ import flask
 import httplib2
 
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 from oauth2client import client
-
-import unittest
 
 import httplib2
 
 from googleapiclient.discovery import build
 
 import itertools
+
+def handle_http_error(request):
+
+    try:
+        resp = request.execute()
+        return resp
+    except HttpError, e:
+        print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
 
 class youtubeAPI():
 
@@ -25,11 +32,11 @@ class youtubeAPI():
     def _get_channel_id(self):
 
         channel = None
-        try:
-            json_data = self.http_youtube.channels().list(part="id", mine="true").execute()
-            channel = json_data['items'][0]['id']
-        except:
-            print 'Could not get channel id'
+        #try:
+        json_data = handle_http_error(self.http_youtube.channels().list(part="id", mine="true")) #.execute()
+        channel = json_data['items'][0]['id']
+        #except:
+        #    print 'Could not get channel id'
 
         return channel
 
@@ -81,7 +88,7 @@ class youtubeAPI():
         comments = []
 
         for comment in json_data['items']:
-            comments.append((comment['id'], comment['snippet']['topLevelComment']['snippet']['textOriginal']))
+            comments.append((comment['id'], comment['snippet']['topLevelComment']['snippet']['textDisplay']))
 
         return comments
 
@@ -109,24 +116,26 @@ class youtubeAPI():
             print "Couldn't delete..."
 
     def delete_comments(self, comments):
+        # doesn't work for some reason...
 
         for comment in comments:
 
             id = comment[0]
             text = comment[1]
-            print "Deleting comment: " + text + "with id: " + id
+            print "Deleting comment: " + text + " with id: " + id
             self._delete_comment(id)
 
+    def _mark_spam(self, comment_id):
 
-# if __name__ == "__main__":
-#
-#     creds = '{"_module": "oauth2client.client", "scopes": ["https://www.googleapis.com/auth/youtube.force-ssl"], "token_expiry": "2016-11-23T05:42:54Z", "id_token": null, "access_token": "ya29.Ci-fAz4L0v5CyI_PjTUa7maXdRdw_UuDe8T3tIQ2YCUDxLRVZrg4AN08sWE3I7furw", "token_uri": "https://accounts.google.com/o/oauth2/token", "invalid": false, "token_response": {"access_token": "ya29.Ci-fAz4L0v5CyI_PjTUa7maXdRdw_UuDe8T3tIQ2YCUDxLRVZrg4AN08sWE3I7furw", "token_type": "Bearer", "expires_in": 3600, "refresh_token": "1/oUkp3CTGC5X3B6bzlv2zjDIPk4ycgC_SBAvVCFeRPv0"}, "client_id": "425814746481-rtbl3jnrsdpli44goq4aufmlu84ii4bl.apps.googleusercontent.com", "token_info_uri": "https://www.googleapis.com/oauth2/v3/tokeninfo", "client_secret": "qOj18iHicJUoeRp3CcTJhMAq", "revoke_uri": "https://accounts.google.com/o/oauth2/revoke", "_class": "OAuth2Credentials", "refresh_token": "1/oUkp3CTGC5X3B6bzlv2zjDIPk4ycgC_SBAvVCFeRPv0", "user_agent": null}'
-#
-#     youtube = youtubeAPI(creds)
-#
-#     uploads = youtube.get_channel_uploads()
-#     vids = youtube.get_video_ids(uploads)
-#     comment = youtube.get_comment_thread(vids[0])
-#     print comment[0][0]
-#     print comment[0][1]
-#     youtube.delete_comment( comment[0][0])
+        try:
+            response = self.http_youtube.comments().markAsSpam(id=comment_id).execute()
+        except HttpError, e:
+            print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
+
+    def mark_spam(self, comments):
+
+        for comment in comments:
+
+            id = comment[0]
+            text = comment[1]
+            self._mark_spam(id)
