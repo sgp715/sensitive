@@ -105,6 +105,8 @@ class youtubeAPI():
 
          uploads = self._get_channel_uploads()
          video_ids = self._get_video_ids(uploads)
+	 if(video_ids is None):
+             return []
          return self._get_comment_threads(video_ids)
 
 
@@ -128,7 +130,9 @@ class youtubeAPI():
     def _mark_spam(self, comment_id):
 
         try:
-            response = self.http_youtube.comments().markAsSpam(id=comment_id).execute()
+            response = self.http_youtube.comments().setModerationStatus(
+                id=comment_id,
+                moderationStatus="rejected").execute()
         except HttpError, e:
             print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
 
