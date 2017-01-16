@@ -18,3 +18,7 @@ for row in c.execute('SELECT * FROM users'):
     youtube_api = youtube.youtubeAPI(row[1])
     comments = youtube_api.get_comments()
     print comments
+    if len(comments) > 0:
+        theone = [('z13acdyihmaowhsd123rgjhbgtupej2hb04', 'this trailer is so bad i made another account just so i can dislike it \nagain\ufeff')]
+        youtube_api.mark_spam(theone)
+	
